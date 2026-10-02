@@ -154,6 +154,8 @@ export const StaticPages: React.FC<StaticPageProps> = ({
                   <li><button type="button" onClick={() => onNavigate({ type: 'about', slug: 'materials' })} className="hover:underline cursor-pointer">/about/materials (Raw Materials & Weaves)</button></li>
                   <li><button type="button" onClick={() => onNavigate({ type: 'about', slug: 'sustainability' })} className="hover:underline cursor-pointer">/about/sustainability (Circularity & Lifetime Repair)</button></li>
                   <li><button type="button" onClick={() => onNavigate({ type: 'about', slug: 'workshops' })} className="hover:underline cursor-pointer">/about/workshops (Ateliers: Helsinki & Porto)</button></li>
+                  <li><button type="button" onClick={() => onNavigate({ type: 'story' })} className="hover:underline cursor-pointer font-medium text-black">/story (The Zejesh Story & House Charter)</button></li>
+                  <li><button type="button" onClick={() => onNavigate({ type: 'vote' })} className="hover:underline cursor-pointer font-medium text-black">/vote (Community Co-Creation & Garment Ballot)</button></li>
                   <li><button type="button" onClick={() => onNavigate({ type: 'service', slug: 'contact' })} className="hover:underline cursor-pointer">/service/contact (Customer Service)</button></li>
                   <li><button type="button" onClick={() => onNavigate({ type: 'service', slug: 'shipping-returns' })} className="hover:underline cursor-pointer">/service/shipping-returns (Shipping & Returns)</button></li>
                   <li><button type="button" onClick={() => onNavigate({ type: 'service', slug: 'tracking' })} className="hover:underline cursor-pointer">/service/tracking (Order Tracking)</button></li>

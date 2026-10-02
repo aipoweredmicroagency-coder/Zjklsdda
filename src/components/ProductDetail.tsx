@@ -272,9 +272,9 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
                     <span className="w-2 h-2 rounded-full bg-black animate-pulse" />
                     <span>Coming Soon · Priority Accession</span>
                   </div>
-                  {product.comingSoonNotice && (
+                  {(product.comingSoonNotice || product.comingSoonMessage) && (
                     <p className="text-xs text-black/70 font-sans">
-                      {product.comingSoonNotice}
+                      {product.comingSoonMessage || product.comingSoonNotice}
                     </p>
                   )}
                   <button

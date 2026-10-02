@@ -315,7 +315,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onScrollCueClick, lang
             e.stopPropagation();
             prevSlide();
           }}
-          className="pointer-events-auto p-2 text-black/50 hover:text-black transition-all duration-300 cursor-pointer flex items-center justify-center hover:scale-110 active:scale-95"
+          className="pointer-events-auto p-2 text-black/40 hover:text-black transition-all duration-300 cursor-pointer flex items-center justify-center hover:scale-110 active:scale-95"
           aria-label="Previous slide"
           title="Previous slide"
         >
@@ -327,34 +327,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onScrollCueClick, lang
             e.stopPropagation();
             nextSlide();
           }}
-          className="pointer-events-auto p-2 text-black/50 hover:text-black transition-all duration-300 cursor-pointer flex items-center justify-center hover:scale-110 active:scale-95"
+          className="pointer-events-auto p-2 text-black/40 hover:text-black transition-all duration-300 cursor-pointer flex items-center justify-center hover:scale-110 active:scale-95"
           aria-label="Next slide"
           title="Next slide"
         >
           <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7 stroke-[1.2]" />
         </button>
-      </div>
-
-      {/* Bottom Controls: Slide Counter (Pure typography, no boxes or borders) */}
-      <div className="absolute bottom-6 sm:bottom-8 left-4 sm:left-8 md:left-10 z-20 flex items-center gap-3 sm:gap-4 text-black text-[11px] sm:text-xs font-mono pointer-events-none">
-        <div className="flex items-center gap-2 py-1">
-          <span className="font-semibold text-black">
-            {currentIndex + 1 < 10 ? `0${currentIndex + 1}` : currentIndex + 1}
-          </span>
-          <span className="text-black/30">/</span>
-          <span className="text-black/50">
-            {slides.length < 10 ? `0${slides.length}` : slides.length}
-          </span>
-          <span className="hidden sm:inline text-black/30">·</span>
-          <span className="hidden sm:inline uppercase text-[10px] tracking-[0.2em] text-black/60">
-            {currentSlide?.type === 'video' ? 'VIDEO' : 'STUDIO PHOTO'}
-          </span>
-        </div>
-      </div>
-
-      {/* Subtle swipe gesture hint on mobile/tablet */}
-      <div className="md:hidden absolute bottom-6 right-4 z-20 font-mono text-[9.5px] uppercase tracking-widest text-black/40 pointer-events-none">
-        ← Swipe →
       </div>
 
       {/* Tiny 1px animated vertical scroll cue at bottom centre - NO WORDS */}

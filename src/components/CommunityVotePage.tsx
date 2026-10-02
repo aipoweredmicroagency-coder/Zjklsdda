@@ -9,14 +9,12 @@ import {
   ThumbsUp,
   Plus,
   X,
-  Check,
   Sparkles,
   ArrowLeft,
-  Filter,
   CheckCircle2,
   Clock,
   Scissors,
-  Layers,
+  ArrowRight,
 } from 'lucide-react';
 
 interface CommunityVotePageProps {
@@ -30,7 +28,7 @@ export const CommunityVotePage: React.FC<CommunityVotePageProps> = ({
 }) => {
   const [suggestions, setSuggestions] = useState<CommunitySuggestion[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState<'all' | 'top' | 'commissioned'>('top');
+  const [activeFilter, setActiveFilter] = useState<'top' | 'all' | 'commissioned'>('top');
   const [votedIds, setVotedIds] = useState<string[]>(() => {
     if (typeof window === 'undefined') return [];
     try {
@@ -77,14 +75,14 @@ export const CommunityVotePage: React.FC<CommunityVotePageProps> = ({
     );
 
     // Commit to Firestore
-    const voterId = `user-${Date.now().toString(36)}`;
+    const voterId = `patron-${Date.now().toString(36)}`;
     await voteForSuggestion(id, voterId);
   };
 
   const handleSubmitProposal = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) {
-      setSubmitError('Please provide a garment title and description.');
+      setSubmitError('Please provide a garment title and silhouette description.');
       return;
     }
 
@@ -140,206 +138,196 @@ export const CommunityVotePage: React.FC<CommunityVotePageProps> = ({
   );
 
   return (
-    <div className="w-full bg-[#FFFFFF] text-[#000000] min-h-screen pt-20 sm:pt-24 select-none font-mono">
-      {/* Top Breadcrumb Header */}
-      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 py-5 border-b border-black/[0.06] flex items-center justify-between text-xs">
+    <div className="w-full bg-[#FFFFFF] text-[#000000] min-h-screen pt-24 sm:pt-32 pb-32 select-none font-mono">
+      {/* Top Breadcrumb Navigation */}
+      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 mb-8 sm:mb-12 flex items-center justify-between text-xs">
         <button
           type="button"
           onClick={onBackToHome}
-          className="flex items-center gap-2 text-black/60 hover:text-black transition-colors cursor-pointer uppercase tracking-wider"
+          className="flex items-center gap-2 text-black/60 hover:text-black transition-colors cursor-pointer uppercase tracking-[0.2em]"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Return Home</span>
+          <ArrowLeft className="w-3.5 h-3.5 stroke-[1.5]" />
+          <span className="hover:underline underline-offset-4">Return Home</span>
         </button>
-        <span className="text-[10px] tracking-[0.25em] uppercase text-black/40">
-          CO-CREATION ARCHIVE · BALLOT
+        <span className="text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-black/40">
+          CO-CREATION ARCHIVE · PATRON BALLOT
         </span>
       </div>
 
       {/* Main Hero Header */}
-      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 py-12 sm:py-16 md:py-20 border-b border-black/[0.08]">
+      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 mb-16 sm:mb-24">
         <div className="max-w-4xl space-y-4">
-          <div className="flex items-center gap-2 text-[10.5px] uppercase tracking-[0.24em] text-black/50">
-            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-            <span>Community Commissions</span>
-          </div>
-          <h1 className="font-editorial text-3xl sm:text-5xl md:text-6xl font-normal tracking-tight text-black">
+          <span className="text-[10.5px] uppercase tracking-[0.3em] text-black/40 block">
+            DEMOCRATIC PATRON ARCHIVE
+          </span>
+          <h1 className="font-editorial text-4xl sm:text-6xl md:text-8xl font-normal tracking-tight text-black leading-[1.05]">
             What Should Zejesh Craft Next?
           </h1>
-          <p className="text-xs sm:text-sm font-sans text-black/70 max-w-2xl leading-relaxed font-light">
-            We reject mass production forecasting. Vote on client proposals or submit your own garment ideas. The pieces with the most community support enter active pattern drafting and Portuguese loom production.
+          <p className="text-xs sm:text-base font-sans text-black/70 max-w-2xl leading-relaxed font-light pt-2">
+            We reject seasonal commercial forecasting. Tell us what garment you want made. The pieces that earn the most patron votes advance directly into pattern drafting and European loom weaving.
           </p>
         </div>
 
-        {/* Live Metrics Ribbon & Action */}
-        <div className="mt-8 pt-8 border-t border-black/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div className="flex items-center gap-6 sm:gap-10 text-xs">
+        {/* Live Metrics & Pure Typographic Action */}
+        <div className="mt-10 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div className="flex items-center gap-8 sm:gap-12 text-xs">
             <div>
-              <span className="text-[10px] uppercase text-black/40 block">Proposals Registered</span>
-              <span className="font-editorial text-2xl font-normal text-black">{suggestions.length}</span>
+              <span className="text-[10px] uppercase tracking-widest text-black/40 block">Proposals Registered</span>
+              <span className="font-editorial text-3xl font-normal text-black">{suggestions.length}</span>
             </div>
-            <div className="w-px h-8 bg-black/10" />
             <div>
-              <span className="text-[10px] uppercase text-black/40 block">Total Votes Cast</span>
-              <span className="font-editorial text-2xl font-normal text-black">{totalVotesCast}</span>
+              <span className="text-[10px] uppercase tracking-widest text-black/40 block">Total Votes Cast</span>
+              <span className="font-editorial text-3xl font-normal text-black">{totalVotesCast}</span>
             </div>
-            <div className="w-px h-8 bg-black/10" />
             <div>
-              <span className="text-[10px] uppercase text-black/40 block">Commissioned</span>
-              <span className="font-editorial text-2xl font-normal text-emerald-700">{commissionedCount} Pieces</span>
+              <span className="text-[10px] uppercase tracking-widest text-black/40 block">In Production</span>
+              <span className="font-editorial text-3xl font-normal text-black">{commissionedCount} Pieces</span>
             </div>
           </div>
 
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="px-5 py-3 bg-black text-white hover:bg-neutral-800 transition-colors text-xs uppercase tracking-[0.18em] cursor-pointer flex items-center justify-center gap-2 shrink-0 font-medium"
+            className="group inline-flex items-center gap-2 py-2 text-xs uppercase font-mono tracking-[0.22em] text-black cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Propose a Garment</span>
+            <Plus className="w-4 h-4 stroke-[1.5]" />
+            <span className="underline underline-offset-8 group-hover:opacity-60 transition-opacity">
+              Propose a New Piece
+            </span>
           </button>
         </div>
       </div>
 
-      {/* Filter Selector Bar */}
-      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 py-5 flex items-center justify-between border-b border-black/[0.06] text-xs">
-        <div className="flex items-center gap-2">
+      {/* Filter Tabs Bar (Pure typography, NO box borders) */}
+      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 mb-12 flex items-center justify-between text-xs">
+        <div className="flex items-center gap-6 sm:gap-8">
           {(['top', 'all', 'commissioned'] as const).map((filterKey) => (
             <button
               key={filterKey}
               type="button"
               onClick={() => setActiveFilter(filterKey)}
-              className={`px-3 py-1.5 uppercase tracking-wider text-[11px] cursor-pointer transition-colors border ${
+              className={`py-1.5 uppercase tracking-[0.2em] text-[11px] sm:text-xs cursor-pointer transition-colors relative ${
                 activeFilter === filterKey
-                  ? 'border-black bg-black text-white font-semibold'
-                  : 'border-black/10 text-black/60 hover:border-black'
+                  ? 'text-black font-semibold'
+                  : 'text-black/50 hover:text-black font-normal'
               }`}
             >
-              {filterKey === 'top' && 'Most Voted (Priority)'}
-              {filterKey === 'all' && 'All Proposals'}
-              {filterKey === 'commissioned' && 'Commissioned & In Sampling'}
+              <span>
+                {filterKey === 'top' && 'Most Voted (Priority)'}
+                {filterKey === 'all' && 'All Proposals'}
+                {filterKey === 'commissioned' && 'Commissioned Pieces'}
+              </span>
+              {activeFilter === filterKey && (
+                <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black" />
+              )}
             </button>
           ))}
         </div>
 
-        <span className="text-[11px] text-black/50 hidden sm:inline">
-          Showing {filteredSuggestions.length} proposals
+        <span className="text-[11px] text-black/40 hidden sm:inline">
+          {filteredSuggestions.length} registered proposals
         </span>
       </div>
 
-      {/* Suggestions Cards Grid */}
-      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 py-10 sm:py-16">
+      {/* Proposals Grid: Borderless editorial layout */}
+      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10">
         {loading ? (
-          <div className="py-20 text-center text-xs text-black/40">
+          <div className="py-24 text-center text-xs text-black/40">
             Consulting atelier archives...
           </div>
         ) : filteredSuggestions.length === 0 ? (
-          <div className="py-20 text-center space-y-3">
-            <p className="text-xs text-black/50">No proposals match this filter.</p>
+          <div className="py-24 text-center space-y-4">
+            <p className="text-xs text-black/50">No proposals recorded under this selection.</p>
             <button
               type="button"
               onClick={() => setActiveFilter('all')}
-              className="text-xs uppercase underline underline-offset-4 cursor-pointer"
+              className="text-xs uppercase tracking-[0.2em] underline underline-offset-8 cursor-pointer text-black"
             >
-              View all proposals
+              View all proposals →
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
             {filteredSuggestions.map((item, idx) => {
               const hasVoted = votedIds.includes(item.id);
               const isCommissioned = item.status === 'commissioned';
               const isInSampling = item.status === 'in_sampling';
+              const isTop = idx === 0 && activeFilter === 'top';
 
               return (
                 <div
                   key={item.id}
-                  className={`p-6 sm:p-8 border transition-all duration-300 bg-white flex flex-col justify-between space-y-6 ${
-                    isCommissioned
-                      ? 'border-emerald-600/40 ring-1 ring-emerald-600/20 shadow-sm'
-                      : 'border-black/[0.1] hover:border-black'
-                  }`}
+                  className="group flex flex-col justify-between space-y-6 pb-8 border-b border-black/[0.08]"
                 >
                   <div className="space-y-4">
-                    {/* Header: Rank, Category, Status */}
-                    <div className="flex items-center justify-between gap-3 text-[10.5px]">
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-black text-xs">
-                          #{idx + 1}
-                        </span>
-                        <span className="px-2 py-0.5 border border-black/15 bg-black/[0.02] uppercase tracking-wider text-black/70">
-                          {item.category}
-                        </span>
-                      </div>
-
-                      {/* Status Badges */}
+                    {/* Status & Category Tag */}
+                    <div className="flex items-center justify-between text-[10px] tracking-[0.25em] uppercase text-black/40">
+                      <span className="font-semibold text-black">{item.category}</span>
                       {isCommissioned ? (
-                        <span className="flex items-center gap-1.5 px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-300 font-semibold uppercase text-[10px] tracking-wider">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                          <span>COMMISSIONED FOR PRODUCTION</span>
+                        <span className="text-emerald-700 flex items-center gap-1 font-semibold">
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>In Atelier Production</span>
                         </span>
                       ) : isInSampling ? (
-                        <span className="flex items-center gap-1.5 px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-300 font-semibold uppercase text-[10px] tracking-wider">
-                          <Scissors className="w-3 h-3 text-amber-600" />
-                          <span>PATTERN DRAFTING & SAMPLING</span>
+                        <span className="text-amber-800 flex items-center gap-1 font-semibold">
+                          <Scissors className="w-3 h-3" />
+                          <span>Sample Drafting</span>
+                        </span>
+                      ) : isTop ? (
+                        <span className="text-black flex items-center gap-1 font-semibold">
+                          <Sparkles className="w-3 h-3 text-amber-600" />
+                          <span>Leading Atelier Vote</span>
                         </span>
                       ) : (
-                        <span className="flex items-center gap-1.5 px-2 py-0.5 bg-neutral-50 text-black/60 border border-black/10 uppercase text-[10px] tracking-wider">
-                          <Clock className="w-3 h-3 text-black/40" />
-                          <span>UNDER BALLOT REVIEW</span>
+                        <span className="text-black/40 flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          <span>Under Review</span>
                         </span>
                       )}
                     </div>
 
                     {/* Proposal Title */}
-                    <h3 className="font-editorial text-2xl sm:text-3xl font-normal text-black leading-snug">
+                    <h3 className="font-editorial text-2xl sm:text-4xl font-normal text-black leading-snug">
                       {item.title}
                     </h3>
 
-                    {/* Fabric specifications */}
-                    <div className="text-[11px] font-mono text-black/70 flex items-start gap-1.5 bg-black/[0.02] p-2.5 border border-black/[0.06]">
-                      <span className="text-black/40 uppercase tracking-wider shrink-0 font-medium">Fabric:</span>
-                      <span className="font-medium text-black">{item.desiredFabric}</span>
-                    </div>
-
-                    {/* Architectural Description */}
-                    <p className="text-xs sm:text-[13px] font-sans text-black/70 leading-relaxed font-light">
+                    {/* Proposal Description */}
+                    <p className="font-sans text-xs sm:text-sm text-black/70 leading-relaxed font-light">
                       {item.description}
                     </p>
 
-                    {/* Atelier Curator Notes */}
-                    {item.curatorNotes && (
-                      <div className="p-3 bg-neutral-50 border-l-2 border-black text-xs font-mono text-black/80 space-y-1">
-                        <span className="text-[9.5px] uppercase tracking-widest text-black/50 block font-bold">
-                          ATELIER DISPATCH:
-                        </span>
-                        <p className="font-sans text-[12px]">{item.curatorNotes}</p>
-                      </div>
-                    )}
+                    {/* Fabric spec */}
+                    <div className="pt-2 text-[11px] text-black/50 flex items-center gap-2">
+                      <span className="text-black/30 uppercase text-[9px] tracking-widest">Fabric:</span>
+                      <span>{item.desiredFabric}</span>
+                    </div>
                   </div>
 
-                  {/* Card Bottom: Submitter Info & Vote Button */}
-                  <div className="pt-4 border-t border-black/[0.08] flex items-center justify-between gap-4">
-                    <div className="text-[10px] text-black/40">
-                      <span>Proposed by {item.submittedBy || 'Anonymous Patron'}</span>
-                      <span className="mx-1.5">·</span>
-                      <span>{new Date(item.createdAt).toLocaleDateString()}</span>
+                  {/* Vote Action Bar (Pure Typography, Zero Box) */}
+                  <div className="pt-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => handleVote(item.id)}
+                        disabled={hasVoted}
+                        className={`flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-mono cursor-pointer transition-opacity ${
+                          hasVoted
+                            ? 'text-black opacity-100 font-semibold'
+                            : 'text-black/60 hover:text-black'
+                        }`}
+                      >
+                        <ThumbsUp className={`w-3.5 h-3.5 ${hasVoted ? 'fill-current' : ''}`} />
+                        <span>{hasVoted ? 'Voted' : 'Vote to Make This'}</span>
+                      </button>
+                      <span className="text-black/30">·</span>
+                      <span className="text-xs font-semibold text-black">
+                        {item.votes} {item.votes === 1 ? 'Vote' : 'Votes'}
+                      </span>
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() => handleVote(item.id)}
-                      disabled={hasVoted}
-                      className={`px-4 py-2 border text-xs uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-2 ${
-                        hasVoted
-                          ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-semibold cursor-default'
-                          : 'border-black bg-white text-black hover:bg-black hover:text-white'
-                      }`}
-                    >
-                      <ThumbsUp className={`w-3.5 h-3.5 ${hasVoted ? 'fill-emerald-800' : ''}`} />
-                      <span>{hasVoted ? 'Voted' : 'Vote'}</span>
-                      <span className="font-bold font-mono pl-1">({item.votes})</span>
-                    </button>
+                    <span className="text-[10px] text-black/30 uppercase tracking-widest">
+                      By {item.submittedBy || 'Patron'}
+                    </span>
                   </div>
                 </div>
               );
@@ -348,149 +336,143 @@ export const CommunityVotePage: React.FC<CommunityVotePageProps> = ({
         )}
       </div>
 
-      {/* MODAL: PROPOSE A NEW GARMENT */}
+      {/* SUBMISSION MODAL: Pure minimalist luxury form */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-[120] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-white border border-black p-6 sm:p-8 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-6">
-            <div className="flex items-start justify-between border-b border-black/10 pb-4">
-              <div>
-                <span className="text-[10px] uppercase tracking-[0.25em] text-black/50 block mb-1">
-                  ATELIER COMMISSION
-                </span>
-                <h2 className="font-editorial text-2xl sm:text-3xl font-normal text-black">
-                  Propose a Garment
-                </h2>
-                <p className="text-xs text-black/60 font-sans mt-1">
-                  Describe the garment you wish to see crafted by Zejesh. If the proposal receives community support, our patternmakers will begin sampling.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsModalOpen(false)}
-                className="p-1 text-black/40 hover:text-black cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+        <div className="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white text-black max-w-xl w-full p-8 sm:p-12 relative animate-fadeIn">
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-6 right-6 p-2 text-black/40 hover:text-black cursor-pointer"
+              aria-label="Close"
+            >
+              <X className="w-5 h-5 stroke-[1.5]" />
+            </button>
+
+            <span className="text-[10px] uppercase font-mono tracking-[0.3em] text-black/40 block mb-2">
+              COMMISSION BALLOT
+            </span>
+            <h2 className="font-editorial text-3xl sm:text-4xl font-normal text-black mb-2">
+              Propose a Garment
+            </h2>
+            <p className="font-sans text-xs text-black/60 leading-relaxed font-light mb-8">
+              Describe the cut, fabric, or piece you want the atelier to weave. Once submitted, other patrons can vote for it.
+            </p>
 
             {submitSuccess ? (
-              <div className="py-10 text-center space-y-3">
-                <CheckCircle2 className="w-10 h-10 mx-auto text-emerald-600" />
-                <h3 className="font-editorial text-2xl font-normal text-black">Proposal Registered</h3>
-                <p className="text-xs font-sans text-black/70 max-w-sm mx-auto">
-                  Your piece has been added to the public ballot. Fellow patrons can now vote for its creation.
+              <div className="py-12 text-center space-y-3">
+                <CheckCircle2 className="w-10 h-10 mx-auto text-emerald-600 stroke-[1.5]" />
+                <h3 className="font-editorial text-2xl">Proposal Registered</h3>
+                <p className="text-xs text-black/60">
+                  Your piece is live on the ballot and ready for votes.
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmitProposal} className="space-y-4 text-xs font-mono">
-                {submitError && (
-                  <div className="p-2.5 bg-red-50 border border-red-200 text-red-800 text-[11px]">
-                    {submitError}
-                  </div>
-                )}
-
+              <form onSubmit={handleSubmitProposal} className="space-y-6">
                 <div>
-                  <label className="block text-[11px] uppercase tracking-wider text-black font-semibold mb-1">
-                    Garment Title / Concept *
+                  <label className="block text-[10px] uppercase tracking-[0.2em] text-black/60 mb-1">
+                    Garment Title
                   </label>
                   <input
                     type="text"
                     required
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="e.g. Full-Length Raw Wool Trench, Seamless Knit Trousers"
-                    className="w-full px-3 py-2 border border-black/30 bg-neutral-50/50 focus:bg-white focus:outline-none focus:border-black text-xs text-black"
+                    placeholder="e.g. Heavy Double-Faced Alpaca Trench"
+                    className="w-full py-2.5 text-xs font-sans text-black border-b border-black/20 focus:border-black focus:outline-none placeholder-black/30"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-[10.5px] uppercase tracking-wider text-black/70 mb-1">
+                    <label className="block text-[10px] uppercase tracking-[0.2em] text-black/60 mb-1">
                       Category
                     </label>
                     <select
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
-                      className="w-full px-3 py-2 border border-black/20 bg-neutral-50/50 focus:bg-white focus:outline-none focus:border-black text-xs text-black"
+                      className="w-full py-2.5 text-xs font-sans text-black border-b border-black/20 focus:border-black focus:outline-none bg-transparent cursor-pointer"
                     >
                       <option value="Outerwear">Outerwear</option>
                       <option value="Knitwear">Knitwear</option>
                       <option value="Tailoring">Tailoring</option>
+                      <option value="Trousers">Trousers</option>
                       <option value="Accessories">Accessories</option>
-                      <option value="Footwear">Footwear</option>
                     </select>
                   </div>
-
                   <div>
-                    <label className="block text-[10.5px] uppercase tracking-wider text-black/70 mb-1">
-                      Desired Fabrication
+                    <label className="block text-[10px] uppercase tracking-[0.2em] text-black/60 mb-1">
+                      Desired Fabric
                     </label>
                     <input
                       type="text"
                       value={desiredFabric}
                       onChange={(e) => setDesiredFabric(e.target.value)}
-                      placeholder="e.g. 100% Virgin Wool (600 gsm)"
-                      className="w-full px-3 py-2 border border-black/20 bg-neutral-50/50 focus:bg-white focus:outline-none focus:border-black text-xs text-black"
+                      placeholder="e.g. 780 gsm Virgin Wool"
+                      className="w-full py-2.5 text-xs font-sans text-black border-b border-black/20 focus:border-black focus:outline-none placeholder-black/30"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[11px] uppercase tracking-wider text-black font-semibold mb-1">
-                    Silhouette & Design Details *
+                  <label className="block text-[10px] uppercase tracking-[0.2em] text-black/60 mb-1">
+                    Silhouette & Detail Description
                   </label>
                   <textarea
+                    rows={3}
                     required
-                    rows={4}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Describe the stance, collar, pockets, closure, length, and why this piece belongs in the permanent archive..."
-                    className="w-full px-3 py-2 border border-black/30 bg-neutral-50/50 focus:bg-white focus:outline-none focus:border-black text-xs font-sans text-black leading-relaxed"
+                    placeholder="Describe cut, lapel, collar height, length, or functional details..."
+                    className="w-full py-2.5 text-xs font-sans text-black border-b border-black/20 focus:border-black focus:outline-none placeholder-black/30 resize-none"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-[10.5px] uppercase tracking-wider text-black/70 mb-1">
+                    <label className="block text-[10px] uppercase tracking-[0.2em] text-black/60 mb-1">
                       Your Name / Handle
                     </label>
                     <input
                       type="text"
                       value={submitterName}
                       onChange={(e) => setSubmitterName(e.target.value)}
-                      placeholder="e.g. Marcus / Collector"
-                      className="w-full px-3 py-2 border border-black/20 bg-neutral-50/50 focus:bg-white focus:outline-none focus:border-black text-xs text-black"
+                      placeholder="Atelier Patron"
+                      className="w-full py-2.5 text-xs font-sans text-black border-b border-black/20 focus:border-black focus:outline-none placeholder-black/30"
                     />
                   </div>
-
                   <div>
-                    <label className="block text-[10.5px] uppercase tracking-wider text-black/70 mb-1">
-                      Email (for notification if made)
+                    <label className="block text-[10px] uppercase tracking-[0.2em] text-black/60 mb-1">
+                      Email (Optional, for commission notice)
                     </label>
                     <input
                       type="email"
                       value={submitterEmail}
                       onChange={(e) => setSubmitterEmail(e.target.value)}
-                      placeholder="name@example.com"
-                      className="w-full px-3 py-2 border border-black/20 bg-neutral-50/50 focus:bg-white focus:outline-none focus:border-black text-xs text-black"
+                      placeholder="patron@example.com"
+                      className="w-full py-2.5 text-xs font-sans text-black border-b border-black/20 focus:border-black focus:outline-none placeholder-black/30"
                     />
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-black/10 flex items-center justify-end gap-3">
+                {submitError && (
+                  <p className="text-xs text-rose-600 font-sans">{submitError}</p>
+                )}
+
+                <div className="pt-4 flex items-center justify-end gap-6 text-xs uppercase tracking-[0.2em]">
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 border border-black/20 text-black hover:bg-black/5 text-xs uppercase tracking-wider cursor-pointer"
+                    className="text-black/50 hover:text-black cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-6 py-2.5 bg-black text-white hover:bg-neutral-800 text-xs uppercase tracking-wider font-semibold cursor-pointer disabled:opacity-50"
+                    className="text-black font-semibold underline underline-offset-8 cursor-pointer disabled:opacity-50"
                   >
-                    {isSubmitting ? 'Registering...' : 'Submit to Ballot'}
+                    {isSubmitting ? 'Registering...' : 'Submit to Ballot →'}
                   </button>
                 </div>
               </form>

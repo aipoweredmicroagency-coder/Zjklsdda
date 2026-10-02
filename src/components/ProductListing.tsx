@@ -214,7 +214,7 @@ export const ProductListing: React.FC<ProductListingProps> = ({
       {/* EDITORIAL COMING SOON DEPARTMENT BANNER */}
       {isCategoryComingSoon && (
         <div className="max-w-[1720px] mx-auto px-4 sm:px-6 md:px-10 pt-6">
-          <div className="p-6 sm:p-8 border border-black bg-neutral-50/80 space-y-3 font-mono">
+          <div className="p-6 sm:p-8 bg-neutral-50/90 space-y-3 font-mono">
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-black/60">
               <span className="w-2 h-2 rounded-full bg-black animate-pulse" />
               <span>ATELIER ANNOUNCEMENT · COMING SOON</span>

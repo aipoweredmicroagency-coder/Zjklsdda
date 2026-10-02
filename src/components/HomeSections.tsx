@@ -105,7 +105,7 @@ export const HomeSections: React.FC<HomeSectionsProps> = ({
                 className="w-full h-full"
                 imageClassName="group-hover:scale-[1.04] transition-transform duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
               />
-              <div className="absolute top-6 left-6 font-mono text-[9px] tracking-[0.25em] uppercase text-black/70 bg-white/90 backdrop-blur-md px-3 py-1 border border-black/[0.08]">
+              <div className="absolute top-6 left-6 font-mono text-[9px] tracking-[0.25em] uppercase text-black/70 bg-white/90 backdrop-blur-md px-3 py-1">
                 COLLECTION I · WOMEN
               </div>
             </div>
@@ -142,7 +142,7 @@ export const HomeSections: React.FC<HomeSectionsProps> = ({
                 className="w-full h-full"
                 imageClassName="group-hover:scale-[1.04] transition-transform duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
               />
-              <div className="absolute top-6 left-6 font-mono text-[9px] tracking-[0.25em] uppercase text-black/70 bg-white/90 backdrop-blur-md px-3 py-1 border border-black/[0.08]">
+              <div className="absolute top-6 left-6 font-mono text-[9px] tracking-[0.25em] uppercase text-black/70 bg-white/90 backdrop-blur-md px-3 py-1">
                 COLLECTION II · MEN
               </div>
             </div>
@@ -265,10 +265,10 @@ export const HomeSections: React.FC<HomeSectionsProps> = ({
                                 e.stopPropagation();
                                 handleQuickAdd(product, sz);
                               }}
-                              className={`px-2 py-0.5 text-[10px] font-mono border cursor-pointer transition-colors ${
+                              className={`px-1.5 py-0.5 text-[10.5px] font-mono cursor-pointer transition-colors ${
                                 isAdded
-                                  ? 'bg-black text-white border-black font-semibold'
-                                  : 'border-black/[0.12] text-black/80 hover:border-black hover:text-black'
+                                  ? 'text-black font-bold underline underline-offset-4'
+                                  : 'text-black/60 hover:text-black hover:underline underline-offset-2'
                               }`}
                             >
                               {isAdded ? '✓' : sz}

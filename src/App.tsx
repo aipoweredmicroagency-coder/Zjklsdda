@@ -16,6 +16,9 @@ import { MobileMenu } from './components/MobileMenu';
 import { JournalModal } from './components/JournalModal';
 import { CookieBanner } from './components/CookieBanner';
 import { StaticPages } from './components/StaticPages';
+import { LookbookView } from './components/LookbookView';
+import { StoryPage } from './components/StoryPage';
+import { CommunityVotePage } from './components/CommunityVotePage';
 import { Footer } from './components/Footer';
 import { CustomCursor } from './components/CustomCursor';
 import { Preloader } from './components/Preloader';
@@ -70,15 +73,42 @@ function StorefrontApp() {
   const [quickLookProduct, setQuickLookProduct] = useState<Product | null>(null);
   const [journalArticleId, setJournalArticleId] = useState<string | null>(null);
 
-  // Cart & Wishlist State
-  const [cartItems, setCartItems] = useState<CartItem[]>(() => [
-    {
-      product: products[0] || ARCHIVE_PRODUCTS[0],
-      size: 'M',
-      quantity: 1,
-    },
-  ]);
-  const [wishlistIds, setWishlistIds] = useState<string[]>(['ze-002', 'ze-004']);
+  // Pure Real Data (NO seeded items: 0 bag, 0 wishlist)
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('zejesh_cart_items');
+        return stored ? JSON.parse(stored) : [];
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
+  const [wishlistIds, setWishlistIds] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('zejesh_wishlist_ids');
+        return stored ? JSON.parse(stored) : [];
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
+
+  // Sync cart & wishlist changes to local storage
+  useEffect(() => {
+    try {
+      localStorage.setItem('zejesh_cart_items', JSON.stringify(cartItems));
+    } catch {}
+  }, [cartItems]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('zejesh_wishlist_ids', JSON.stringify(wishlistIds));
+    } catch {}
+  }, [wishlistIds]);
 
   // Hero visibility tracking for header transparency and blend mode
   const [isHeroVisible, setIsHeroVisible] = useState(true);
@@ -264,6 +294,8 @@ function StorefrontApp() {
         onSelectCategory={handleSelectCategory}
         onNavigateHome={handleNavigateHome}
         onNavigateLookbook={() => navigateTo({ type: 'lookbook' })}
+        onNavigateStory={() => navigateTo({ type: 'story' })}
+        onNavigateVote={() => navigateTo({ type: 'vote' })}
         onNavigateSitemap={() => navigateTo({ type: 'sitemap' })}
         isHeroVisible={route.type === 'home' && isHeroVisible}
         currentCategory={route.type === 'archive' ? (route.category || 'all') : undefined}
@@ -339,9 +371,34 @@ function StorefrontApp() {
           />
         )}
 
-        {/* PAGES: DEDICATED STATIC & EDITORIAL PAGES (Lookbook, Gift Cards, Sitemap, About, Service, Legal) */}
-        {(route.type === 'lookbook' ||
-          route.type === 'gift-cards' ||
+        {/* PAGE: DEDICATED LOOKBOOK SPREADS */}
+        {route.type === 'lookbook' && (
+          <LookbookView
+            products={products}
+            language={language}
+            onBackToHome={handleNavigateHome}
+            onSelectProduct={handleSelectProduct}
+          />
+        )}
+
+        {/* PAGE: THE STORY & ATELIER ORIGINS */}
+        {route.type === 'story' && (
+          <StoryPage
+            onBackToHome={handleNavigateHome}
+            onExploreArchive={() => navigateTo({ type: 'archive' })}
+          />
+        )}
+
+        {/* PAGE: PATRON SUGGESTIONS & BALLOT */}
+        {route.type === 'vote' && (
+          <CommunityVotePage
+            onBackToHome={handleNavigateHome}
+            onNavigateArchive={() => navigateTo({ type: 'archive' })}
+          />
+        )}
+
+        {/* PAGES: DEDICATED STATIC & EDITORIAL PAGES (Gift Cards, Sitemap, About, Service, Legal) */}
+        {(route.type === 'gift-cards' ||
           route.type === 'sitemap' ||
           route.type === 'about' ||
           route.type === 'service' ||
@@ -412,6 +469,7 @@ function StorefrontApp() {
         onSetLanguage={(lang) => setLanguage(lang)}
         onSelectCategory={handleSelectCategory}
         onNavigatePage={(r) => navigateTo(r)}
+        settings={settings}
       />
 
       {/* 6. MODALS & DRAWERS */}
@@ -430,6 +488,8 @@ function StorefrontApp() {
         onSelectCategory={handleSelectCategory}
         onNavigateHome={handleNavigateHome}
         onNavigateLookbook={() => navigateTo({ type: 'lookbook' })}
+        onNavigateStory={() => navigateTo({ type: 'story' })}
+        onNavigateVote={() => navigateTo({ type: 'vote' })}
         onNavigateSitemap={() => navigateTo({ type: 'sitemap' })}
         onOpenJournal={() => navigateTo({ type: 'journal' })}
         categories={categories}

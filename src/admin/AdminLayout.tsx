@@ -360,18 +360,10 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             <span className="hidden lg:inline text-[11px] uppercase tracking-wider">Lock</span>
           </button>
 
-          {/* Role Indicator & Switcher */}
-          <div className="hidden lg:flex items-center gap-2 pl-2 border-l border-black/[0.08]">
-            <span className="text-[11px] text-black/50">Role:</span>
-            <select
-              value={role || 'owner'}
-              onChange={(e) => switchRole(e.target.value as any)}
-              className="py-0.5 text-[11px] bg-transparent cursor-pointer font-medium uppercase focus:outline-none"
-            >
-              <option value="owner">Owner (Full Admin)</option>
-              <option value="editor">Editor (Write Access)</option>
-              <option value="viewer">Viewer (Read Only)</option>
-            </select>
+          {/* Owner Identity Badge */}
+          <div className="hidden lg:flex items-center gap-1.5 pl-2 font-mono text-[11px] text-black/60">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="uppercase tracking-wider font-medium text-black">Owner · Huxaifa</span>
           </div>
 
           {/* Back to storefront link */}

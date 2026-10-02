@@ -49,6 +49,20 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
     return 'huxaifa0fficial@gmail.com';
   });
 
+  const [editorEmail, setEditorEmail] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('zejesh_admin_editor_email') || '';
+    }
+    return '';
+  });
+
+  const [viewerEmail, setViewerEmail] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('zejesh_admin_viewer_email') || '';
+    }
+    return '';
+  });
+
   // State for new platform form
   const [newPlatformName, setNewPlatformName] = useState('Instagram');
   const [newPlatformUrl, setNewPlatformUrl] = useState('');
@@ -82,10 +96,20 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
     setIsSaving(true);
     setSaveSuccessMsg(null);
     try {
-      // 1. Save owner email locally & in session
+      // 1. Save owner and staff emails locally & in session
       if (typeof window !== 'undefined') {
         localStorage.setItem('zejesh_admin_owner_email', ownerEmail.trim().toLowerCase());
         sessionStorage.setItem('zejesh_admin_session_email', ownerEmail.trim().toLowerCase());
+        if (editorEmail.trim()) {
+          localStorage.setItem('zejesh_admin_editor_email', editorEmail.trim().toLowerCase());
+        } else {
+          localStorage.removeItem('zejesh_admin_editor_email');
+        }
+        if (viewerEmail.trim()) {
+          localStorage.setItem('zejesh_admin_viewer_email', viewerEmail.trim().toLowerCase());
+        } else {
+          localStorage.removeItem('zejesh_admin_viewer_email');
+        }
       }
 
       // 2. Persist updated store settings to Firestore
@@ -257,10 +281,10 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
           Manage the authorized owner access email and public client contact endpoints.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
           <div>
             <label className="block text-[10.5px] uppercase font-semibold text-black mb-1">
-              Principal Owner & Master Admin Email
+              Slot 1: Principal Owner Email
             </label>
             <input
               type="email"
@@ -269,11 +293,45 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
               placeholder="e.g. huxaifa0fficial@gmail.com"
               className="w-full px-3 py-2 border border-black/30 focus:border-black bg-white font-mono text-xs"
             />
-            <span className="text-[10px] text-black/40 block mt-1">
-              Only this email address is authorized to unlock and govern the studio admin console.
+            <span className="text-[10px] text-emerald-700 font-semibold block mt-1">
+              ✓ Active Master Access (huxaifa0fficial@gmail.com)
             </span>
           </div>
 
+          <div>
+            <label className="block text-[10.5px] uppercase font-semibold text-black/70 mb-1">
+              Slot 2: Editor Email (Optional)
+            </label>
+            <input
+              type="email"
+              value={editorEmail}
+              onChange={(e) => setEditorEmail(e.target.value)}
+              placeholder="e.g. editor@zejesh.com (Unassigned)"
+              className="w-full px-3 py-2 border border-black/20 focus:border-black bg-white font-mono text-xs"
+            />
+            <span className="text-[10px] text-black/40 block mt-1">
+              {editorEmail.trim() ? 'Configured Editor' : 'Pending assignment / Not sure yet'}
+            </span>
+          </div>
+
+          <div>
+            <label className="block text-[10.5px] uppercase font-semibold text-black/70 mb-1">
+              Slot 3: Read-Only Email (Optional)
+            </label>
+            <input
+              type="email"
+              value={viewerEmail}
+              onChange={(e) => setViewerEmail(e.target.value)}
+              placeholder="e.g. readonly@zejesh.com (Unassigned)"
+              className="w-full px-3 py-2 border border-black/20 focus:border-black bg-white font-mono text-xs"
+            />
+            <span className="text-[10px] text-black/40 block mt-1">
+              {viewerEmail.trim() ? 'Configured Read-Only' : 'Pending assignment / Not sure yet'}
+            </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-black/[0.06]">
           <div>
             <label className="block text-[10.5px] uppercase text-black/70 mb-1">
               Storefront Client Support Email
@@ -291,7 +349,7 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
               className="w-full px-3 py-2 border border-black/20 focus:border-black bg-white font-mono text-xs"
             />
             <span className="text-[10px] text-black/40 block mt-1">
-              Displayed on invoice receipts and storefront customer service contacts.
+              Public contact endpoint.
             </span>
           </div>
 

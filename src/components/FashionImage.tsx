@@ -38,6 +38,16 @@ export const FashionImage: React.FC<FashionImageProps> = ({
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const resolvedPosition =
+    position !== 'center 30%'
+      ? position
+      : isHover
+      ? product?.hoverImagePosition || product?.imagePosition || 'center 30%'
+      : product?.imagePosition || 'center 30%';
+
+  const resolvedScale =
+    scale !== 1 ? scale : product?.imageScale || 1;
+
   const resolvedSrc =
     src ||
     (isHover ? product?.hoverImage || product?.image : product?.image) ||
@@ -69,8 +79,8 @@ export const FashionImage: React.FC<FashionImageProps> = ({
         onLoad={() => setIsLoaded(true)}
         onError={() => setHasError(true)}
         style={{
-          objectPosition: position,
-          transform: `${flipped ? 'scaleX(-1)' : ''} scale(${scale})`,
+          objectPosition: resolvedPosition,
+          transform: `${flipped ? 'scaleX(-1)' : ''} scale(${resolvedScale})`,
         }}
         className={`w-full h-full object-cover transition-transform duration-700 ease-out ${
           enableMultiply ? 'mix-blend-multiply' : ''

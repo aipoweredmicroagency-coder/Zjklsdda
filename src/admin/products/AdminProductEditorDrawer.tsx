@@ -153,6 +153,15 @@ export const AdminProductEditorDrawer: React.FC<AdminProductEditorDrawerProps> =
     setFormData({ ...formData, hoverImage: url });
   };
 
+  const getSafeCropVariation = (onModel: { position: string; scale: number; aspectRatio?: '3/4' | '4/5' | '1/1' | '16/9'; flipped?: boolean }) => ({
+    packshot: formData.cropVariation?.packshot || { position: 'center center', scale: 1, aspectRatio: '3/4' as const },
+    onModel,
+    detail1: formData.cropVariation?.detail1 || { position: 'center center', scale: 1.2 },
+    detail2: formData.cropVariation?.detail2 || { position: 'center center', scale: 1.2 },
+    detail3: formData.cropVariation?.detail3 || { position: 'center center', scale: 1.2 },
+    detail4: formData.cropVariation?.detail4 || { position: 'center center', scale: 1.2 },
+  });
+
   const handleUpdateFocalX = (x: number) => {
     const updatedImages = [...(formData.images || [])];
     if (updatedImages[0]) {
@@ -162,15 +171,7 @@ export const AdminProductEditorDrawer: React.FC<AdminProductEditorDrawerProps> =
       ...formData,
       imagePosition: `${x}% ${focalY}%`,
       images: updatedImages,
-      cropVariation: {
-        ...(formData.cropVariation || {
-          detail1: { position: 'center center', scale: 1.2 },
-          detail2: { position: 'center center', scale: 1.2 },
-          detail3: { position: 'center center', scale: 1.2 },
-          detail4: { position: 'center center', scale: 1.2 },
-        }),
-        onModel: { position: `${x}% ${focalY}%`, scale: focalScale },
-      },
+      cropVariation: getSafeCropVariation({ position: `${x}% ${focalY}%`, scale: focalScale }),
     });
   };
 
@@ -183,15 +184,7 @@ export const AdminProductEditorDrawer: React.FC<AdminProductEditorDrawerProps> =
       ...formData,
       imagePosition: `${focalX}% ${y}%`,
       images: updatedImages,
-      cropVariation: {
-        ...(formData.cropVariation || {
-          detail1: { position: 'center center', scale: 1.2 },
-          detail2: { position: 'center center', scale: 1.2 },
-          detail3: { position: 'center center', scale: 1.2 },
-          detail4: { position: 'center center', scale: 1.2 },
-        }),
-        onModel: { position: `${focalX}% ${y}%`, scale: focalScale },
-      },
+      cropVariation: getSafeCropVariation({ position: `${focalX}% ${y}%`, scale: focalScale }),
     });
   };
 
@@ -199,15 +192,7 @@ export const AdminProductEditorDrawer: React.FC<AdminProductEditorDrawerProps> =
     setFormData({
       ...formData,
       imageScale: scale,
-      cropVariation: {
-        ...(formData.cropVariation || {
-          detail1: { position: 'center center', scale: 1.2 },
-          detail2: { position: 'center center', scale: 1.2 },
-          detail3: { position: 'center center', scale: 1.2 },
-          detail4: { position: 'center center', scale: 1.2 },
-        }),
-        onModel: { position: `${focalX}% ${focalY}%`, scale },
-      },
+      cropVariation: getSafeCropVariation({ position: `${focalX}% ${focalY}%`, scale }),
     });
   };
 
@@ -227,15 +212,7 @@ export const AdminProductEditorDrawer: React.FC<AdminProductEditorDrawerProps> =
         ...formData,
         imagePosition: `${x}% ${y}%`,
         images: updatedImages,
-        cropVariation: {
-          ...(formData.cropVariation || {
-            detail1: { position: 'center center', scale: 1.2 },
-            detail2: { position: 'center center', scale: 1.2 },
-            detail3: { position: 'center center', scale: 1.2 },
-            detail4: { position: 'center center', scale: 1.2 },
-          }),
-          onModel: { position: `${x}% ${y}%`, scale: focalScale },
-        },
+        cropVariation: getSafeCropVariation({ position: `${x}% ${y}%`, scale: focalScale }),
       });
     }
   };
@@ -257,15 +234,7 @@ export const AdminProductEditorDrawer: React.FC<AdminProductEditorDrawerProps> =
       hoverImage: hoverUrl || primaryUrl,
       imagePosition: `${focalX}% ${focalY}%`,
       imageScale: focalScale,
-      cropVariation: {
-        ...(formData.cropVariation || {
-          detail1: { position: 'center center', scale: 1.2 },
-          detail2: { position: 'center center', scale: 1.2 },
-          detail3: { position: 'center center', scale: 1.2 },
-          detail4: { position: 'center center', scale: 1.2 },
-        }),
-        onModel: { position: `${focalX}% ${focalY}%`, scale: focalScale },
-      },
+      cropVariation: getSafeCropVariation({ position: `${focalX}% ${focalY}%`, scale: focalScale }),
       isComingSoon: Boolean(formData.isComingSoon || formData.status === 'coming_soon'),
       comingSoonNotice: formData.comingSoonNotice || '',
       updatedAt: new Date().toISOString(),

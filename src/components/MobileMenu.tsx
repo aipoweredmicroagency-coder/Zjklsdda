@@ -13,6 +13,8 @@ interface MobileMenuProps {
   onSelectCategory: (cat: string, sub?: string) => void;
   onNavigateHome: () => void;
   onNavigateLookbook: () => void;
+  onNavigateStory?: () => void;
+  onNavigateVote?: () => void;
   onNavigateSitemap: () => void;
   onOpenJournal: () => void;
   categories?: Category[];
@@ -26,6 +28,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
   onSelectCategory,
   onNavigateHome,
   onNavigateLookbook,
+  onNavigateStory,
+  onNavigateVote,
   onNavigateSitemap,
   onOpenJournal,
   categories = [],
@@ -59,10 +63,12 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
         });
       });
 
-      // Exactly ONE collections button, followed by lookbook and journal
+      // Exactly ONE collections button, followed by lookbook, story, vote, and journal
       items.push(
         { key: 'kokoelmat', label: t.nav.collections, subKey: 'kokoelmat', categoryId: 'kokoelmat' },
         { key: 'lookbook', label: t.nav.lookbook, subKey: null, categoryId: 'lookbook' },
+        { key: 'story', label: 'THE STORY', subKey: null, categoryId: 'story' },
+        { key: 'vote', label: 'SUGGESTIONS & VOTE', subKey: null, categoryId: 'vote' },
         { key: 'journal', label: t.nav.journal, subKey: null, categoryId: 'journal' }
       );
       return items;
@@ -75,6 +81,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
       { key: 'asusteet', label: t.nav.accessories, subKey: 'asusteet', categoryId: 'asusteet' },
       { key: 'kokoelmat', label: t.nav.collections, subKey: 'kokoelmat', categoryId: 'kokoelmat' },
       { key: 'lookbook', label: t.nav.lookbook, subKey: null, categoryId: 'lookbook' },
+      { key: 'story', label: 'THE STORY', subKey: null, categoryId: 'story' },
+      { key: 'vote', label: 'SUGGESTIONS & VOTE', subKey: null, categoryId: 'vote' },
       { key: 'journal', label: t.nav.journal, subKey: null, categoryId: 'journal' },
     ];
   }, [categories, t]);
@@ -139,6 +147,12 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
                       onClose();
                     } else if (item.key === 'lookbook') {
                       onNavigateLookbook();
+                      onClose();
+                    } else if (item.key === 'story') {
+                      onNavigateStory?.();
+                      onClose();
+                    } else if (item.key === 'vote') {
+                      onNavigateVote?.();
                       onClose();
                     } else {
                       onSelectCategory(item.categoryId);

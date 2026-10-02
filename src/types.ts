@@ -1,6 +1,6 @@
 export type Language = 'fi' | 'en' | 'sv';
 
-export type ProductStatus = 'draft' | 'scheduled' | 'live' | 'sold_out' | 'archived';
+export type ProductStatus = 'draft' | 'scheduled' | 'live' | 'sold_out' | 'archived' | 'coming_soon';
 
 export interface ProductVariant {
   size: string;
@@ -65,6 +65,7 @@ export interface Product {
   isLimited: boolean;
   isComingSoon?: boolean;
   comingSoonMessage?: string;
+  comingSoonNotice?: string;
   limitedEdition?: {
     isLimited: boolean;
     editionSize?: number;
@@ -95,30 +96,38 @@ export interface Product {
     packshot: {
       position: string;
       scale: number;
-      aspectRatio: '3/4' | '4/5' | '1/1' | '16/9';
+      aspectRatio?: '3/4' | '4/5' | '1/1' | '16/9';
       flipped?: boolean;
     };
     onModel: {
       position: string;
       scale: number;
-      aspectRatio: '3/4' | '4/5' | '1/1' | '16/9';
+      aspectRatio?: '3/4' | '4/5' | '1/1' | '16/9';
       flipped?: boolean;
     };
     detail1: {
       position: string;
       scale: number;
+      aspectRatio?: '3/4' | '4/5' | '1/1' | '16/9';
+      flipped?: boolean;
     };
     detail2: {
       position: string;
       scale: number;
+      aspectRatio?: '3/4' | '4/5' | '1/1' | '16/9';
+      flipped?: boolean;
     };
     detail3: {
       position: string;
       scale: number;
+      aspectRatio?: '3/4' | '4/5' | '1/1' | '16/9';
+      flipped?: boolean;
     };
     detail4: {
       position: string;
       scale: number;
+      aspectRatio?: '3/4' | '4/5' | '1/1' | '16/9';
+      flipped?: boolean;
     };
   };
 }

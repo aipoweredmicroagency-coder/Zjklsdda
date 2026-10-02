@@ -19,6 +19,8 @@ interface HeaderProps {
   onSelectCategory: (cat: string, sub?: string) => void;
   onNavigateHome: () => void;
   onNavigateLookbook: () => void;
+  onNavigateStory?: () => void;
+  onNavigateVote?: () => void;
   onNavigateSitemap: () => void;
   isHeroVisible: boolean;
   currentCategory?: string;
@@ -39,6 +41,8 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectCategory,
   onNavigateHome,
   onNavigateLookbook,
+  onNavigateStory,
+  onNavigateVote,
   onNavigateSitemap,
   isHeroVisible,
   currentCategory,
@@ -100,10 +104,12 @@ export const Header: React.FC<HeaderProps> = ({
         });
       });
 
-      // Exactly ONE collections button, followed by lookbook
+      // Collections, Lookbook, Story, and Atelier Suggestions & Vote
       items.push(
         { key: 'kokoelmat', label: t.nav.collections, subKey: 'kokoelmat', categoryId: 'kokoelmat' },
-        { key: 'lookbook', label: t.nav.lookbook, subKey: null, categoryId: 'lookbook' }
+        { key: 'lookbook', label: t.nav.lookbook, subKey: null, categoryId: 'lookbook' },
+        { key: 'story', label: 'THE STORY', subKey: null, categoryId: 'story' },
+        { key: 'vote', label: 'SUGGESTIONS & VOTE', subKey: null, categoryId: 'vote' }
       );
       return items;
     }
@@ -115,6 +121,8 @@ export const Header: React.FC<HeaderProps> = ({
       { key: 'asusteet', label: t.nav.accessories, subKey: 'asusteet', categoryId: 'asusteet' },
       { key: 'kokoelmat', label: t.nav.collections, subKey: 'kokoelmat', categoryId: 'kokoelmat' },
       { key: 'lookbook', label: t.nav.lookbook, subKey: null, categoryId: 'lookbook' },
+      { key: 'story', label: 'THE STORY', subKey: null, categoryId: 'story' },
+      { key: 'vote', label: 'SUGGESTIONS & VOTE', subKey: null, categoryId: 'vote' },
     ];
   }, [categories, t]);
 
@@ -136,7 +144,8 @@ export const Header: React.FC<HeaderProps> = ({
     return mockSubs.map((s) => ({ name: s, slug: s.toLowerCase().replace(/\s+/g, '-') }));
   }, [hoveredNav, categories]);
 
-  const isOverHeroAtTop = isHeroVisible && !isScrolled;
+  // Seamless transparency across EVERY page when at the top of the viewport
+  const isTransparent = !isScrolled;
 
   return (
     <>
@@ -145,9 +154,9 @@ export const Header: React.FC<HeaderProps> = ({
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isHidden ? '-translate-y-full' : 'translate-y-0'
         } ${
-          isOverHeroAtTop
-            ? 'bg-transparent text-black border-transparent shadow-none'
-            : 'bg-white/95 backdrop-blur-md text-black border-b border-black/[0.06] shadow-[0_1px_20px_rgba(0,0,0,0.03)]'
+          isTransparent
+            ? 'bg-transparent text-black border-none shadow-none'
+            : 'bg-white/80 backdrop-blur-md text-black border-none shadow-none'
         }`}
       >
         {/* ROW 1: BRAND LOGO (ABSOLUTELY CENTERED) & UTILITY ACTIONS (BALANCED) */}
@@ -247,19 +256,21 @@ export const Header: React.FC<HeaderProps> = ({
         {/* ROW 2: DESKTOP CATEGORY NAVIGATION STRIP (NO BORDER BETWEEN LOGO AND CATEGORIES) */}
         <div
           className={`hidden lg:block transition-colors duration-300 ${
-            isOverHeroAtTop
+            isTransparent
               ? 'bg-transparent'
-              : 'bg-white/95 backdrop-blur-md'
+              : 'bg-white/80 backdrop-blur-md'
           }`}
         >
           <div className="max-w-[1720px] mx-auto px-6 md:px-10 h-11 flex items-center justify-center">
             <nav
-              className="flex items-center justify-center gap-8 xl:gap-12 2xl:gap-16"
+              className="flex items-center justify-center gap-7 xl:gap-10 2xl:gap-14"
               aria-label="Main navigation"
             >
               {dynamicNavItems.map((item) => {
                 const isActive =
                   (item.key === 'lookbook' && currentRouteType === 'lookbook') ||
+                  (item.key === 'story' && currentRouteType === 'story') ||
+                  (item.key === 'vote' && currentRouteType === 'vote') ||
                   (currentRouteType === 'archive' &&
                     (currentCategory === item.categoryId || (item.key === 'uutuudet' && currentCategory === 'all')));
 
@@ -272,18 +283,22 @@ export const Header: React.FC<HeaderProps> = ({
                       setHoveredNav(null);
                       if (item.key === 'lookbook') {
                         onNavigateLookbook();
+                      } else if (item.key === 'story') {
+                        onNavigateStory?.();
+                      } else if (item.key === 'vote') {
+                        onNavigateVote?.();
                       } else {
                         onSelectCategory(item.categoryId);
                       }
                     }}
-                    className={`relative py-2.5 px-3 text-[12px] xl:text-[12.5px] uppercase tracking-[0.22em] xl:tracking-[0.24em] font-sans font-medium transition-colors duration-200 cursor-pointer whitespace-nowrap group/link ${
+                    className={`relative py-2.5 px-2.5 text-[11.5px] xl:text-[12px] uppercase tracking-[0.22em] font-sans font-medium transition-colors duration-200 cursor-pointer whitespace-nowrap group/link ${
                       isActive ? 'text-black' : 'text-black/75 hover:text-black'
                     }`}
                   >
                     <span>{item.label}</span>
                     {/* Animated Hairline Underline on Hover & Active State */}
                     <span
-                      className={`absolute bottom-0.5 left-3 right-3 h-[1px] bg-black transition-all duration-300 origin-center ${
+                      className={`absolute bottom-0.5 left-2.5 right-2.5 h-[1px] bg-black transition-all duration-300 origin-center ${
                         isActive
                           ? 'scale-x-100 opacity-100'
                           : 'scale-x-0 opacity-0 group-hover/link:scale-x-100 group-hover/link:opacity-100'
